@@ -207,7 +207,7 @@ SELECT
 FROM CovidProject.dbo.CovidDeaths
 WHERE location = 'United States'
 
--- Covid fatality rate in the us view
+-- Covid fatality rate in the US view
 
 CREATE VIEW us_fatality_rate AS
 SELECT
@@ -217,7 +217,7 @@ FROM CovidProject.dbo.CovidDeaths
 WHERE continent IS NOT NULL
 GROUP BY location
 
--- Covid mortality rate in the us view
+-- Covid mortality rate in the US view
 
 CREATE VIEW us_mortality_rate AS
 SELECT
