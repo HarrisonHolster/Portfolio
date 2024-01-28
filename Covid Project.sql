@@ -55,6 +55,18 @@ FROM CovidProject.dbo.CovidDeaths
 GROUP BY location, population
 ORDER BY infection_rate DESC
 
+-- Peak incidence and infection rate by date
+
+SELECT
+	location,
+	date,
+	MAX(total_cases) AS peak_incidence,
+	population,
+	MAX(CAST(total_cases AS FLOAT)/population)*100 AS infection_rate
+FROM CovidProject.dbo.CovidDeaths
+GROUP BY location, population, date
+ORDER BY infection_rate DESC
+	
 -- Finding out which country had the highest fatalities
 
 SELECT
