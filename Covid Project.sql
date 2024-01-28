@@ -55,7 +55,7 @@ FROM CovidProject.dbo.CovidDeaths
 GROUP BY location, population
 ORDER BY infection_rate DESC
 
--- Peak incidence and infection rate by date
+-- Peak incidence and infection rates in countries by date
 
 SELECT
 	location,
@@ -66,7 +66,7 @@ SELECT
 FROM CovidProject.dbo.CovidDeaths
 GROUP BY location, population, date
 ORDER BY infection_rate DESC
-	
+
 -- Finding out which country had the highest fatalities
 
 SELECT
@@ -127,7 +127,6 @@ SELECT
 FROM CovidProject.dbo.CovidDeaths
 WHERE continent IS NOT NULL
 
-
 -- Calculating total vaccinated population each day
 SELECT
 	d.continent,
@@ -179,6 +178,59 @@ FROM #VaccinatedPopulationPercentage
 ORDER BY location, date ASC
 
 --- Creating views for visualization
+-- Global fatality rate view
+SELECT
+	SUM(new_cases) AS total_cases,
+	SUM(new_deaths) AS total_deaths,
+	SUM(CAST(new_deaths AS FLOAT)) / SUM(CAST(new_cases AS FLOAT))*100 AS fatality_rate
+FROM CovidProject.dbo.CovidDeaths
+WHERE continent IS NOT NULL
+
+-- Total fatalities by continent view
+
+SELECT
+	location,
+	SUM(new_deaths) AS total_fatalities
+FROM CovidProject.dbo.CovidDeaths
+WHERE continent IS NULL
+	AND location NOT IN ('World', 'European Union', 'International')
+GROUP BY location
+ORDER BY total_fatalities DESC
+
+-- Peak incidence and infection rates compared to population view
+SELECT
+	location,
+	MAX(total_cases) AS peak_incidence,
+	population,
+	MAX(CAST(total_cases AS FLOAT)/population)*100 AS infection_rate
+FROM CovidProject.dbo.CovidDeaths
+GROUP BY location, population
+ORDER BY infection_rate DESC
+
+-- Peak incidence and infection rates in countries by date view
+CREATE VIEW infection_rate_date AS 
+SELECT
+	location,
+	date,
+	MAX(total_cases) AS peak_incidence,
+	population,
+	MAX(CAST(total_cases AS FLOAT)/population)*100 AS infection_rate
+FROM CovidProject.dbo.CovidDeaths
+GROUP BY location, population, date
+ORDER BY infection_rate DESC
+
+-- Covid fatality rate in the US view
+
+CREATE VIEW us_fatality_rate AS
+SELECT
+	location,
+	date,
+	total_cases,
+	total_deaths,
+	(CAST(total_deaths AS FLOAT) / CAST(total_cases AS FLOAT))*100 AS covid_fatality_rate
+FROM CovidProject.dbo.CovidDeaths
+WHERE location = 'United States'
+
 --Percentage of country's population that is vaccinated view
 
 CREATE VIEW VaccinatedPopulationPercentage AS
@@ -197,18 +249,6 @@ JOIN CovidProject.dbo.CovidVaccinations vac
 	AND d.date = vac.date
 	WHERE d.continent IS NOT NULL
 
--- Covid fatality rate in the US view
-
-CREATE VIEW us_fatality_rate AS
-SELECT
-	location,
-	date,
-	total_cases,
-	total_deaths,
-	(CAST(total_deaths AS FLOAT) / CAST(total_cases AS FLOAT))*100 AS covid_fatality_rate
-FROM CovidProject.dbo.CovidDeaths
-WHERE location = 'United States'
-
 -- Covid prevalence rate in the US view
 
 CREATE VIEW us_prevalence_rate AS
@@ -220,23 +260,3 @@ SELECT
 	(CAST(total_cases AS FLOAT) / population)*100 AS prevalence_rate
 FROM CovidProject.dbo.CovidDeaths
 WHERE location = 'United States'
-
--- Covid fatality rate in the US view
-
-CREATE VIEW us_fatality_rate AS
-SELECT
-	location,
-	MAX(total_deaths) AS total_fatalities
-FROM CovidProject.dbo.CovidDeaths
-WHERE continent IS NOT NULL
-GROUP BY location
-
--- Covid mortality rate in the US view
-
-CREATE VIEW us_mortality_rate AS
-SELECT
-	location,
-	(MAX(CAST(total_deaths AS FLOAT)) / (MAX(CAST(population AS FLOAT)))*100) AS mortality_rate
-FROM CovidProject.dbo.CovidDeaths
-WHERE continent IS NOT NULL
-GROUP BY location
