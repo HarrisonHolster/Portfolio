@@ -76,11 +76,13 @@ GROUP BY location
 ORDER BY mortality_rate DESC
 
 -- Total fatalities by continent
+
 SELECT
 	location,
-	MAX(total_deaths) AS total_fatalities
+	SUM(new_deaths) AS total_fatalities
 FROM CovidProject.dbo.CovidDeaths
 WHERE continent IS NULL
+	AND location NOT IN ('World', 'European Union', 'International')
 GROUP BY location
 ORDER BY total_fatalities DESC
 
