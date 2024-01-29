@@ -1,21 +1,20 @@
 /*
   COVID-19 Data Analysis Project
 
-  This set of SQL queries is part of my COVID-19 data analysis project, designed to showcase
-  my skills in data retrieval, manipulation, and analysis. The queries provided here are
-  specifically tailored to extract relevant information from the dataset for further analysis.
+This set of SQL queries is part of my COVID-19 data analysis project, designed to showcase my skills in data retrieval, 
+manipulation, and analysis. The queries provided here are specifically tailored to extract relevant information from the 
+dataset for further analysis.
 
-  Project Overview:
-  - Objective: Analyze COVID-19 data to derive insights into infection rates, geographical
-               trends, and other key metrics.
-  - Tools Used: SQL for data querying and analysis.
+Project Overview:
+- Objective: Analyze COVID-19 data to derive insights into infection rates, geographical trends, and other key metrics.
+- Tools Used: Microsoft SQL Server for data querying and analysis, Tableau for data visualization.  
 
-  Feel free to explore the queries below to gain insights into my
-  approach and methodology.
-Accompanying Tableau dashboard: https://public.tableau.com/app/profile/harrison.holster/viz/Covid-19January2020-April2021/Dashboard1
+Feel free to explore the queries below to gain insights into my approach and methodology.
+Accompanying Tableau dashboard: 
+https://public.tableau.com/app/profile/harrison.holster/viz/Covid-19January2020-April2021/Dashboard1
 */
 
--- Actual SQL queries start below this comment
+--- Actual SQL queries start below this comment
 
 SELECT *
 FROM
